@@ -94,7 +94,7 @@
                                         <div class="form-group">
                                             <label for="empresa_proveedor">Empresa Proveedor</label><b>*</b>
                                             <input type="text" name="empresa_proveedor" id="empresa_proveedor"
-                                                class="form-control" value="{{ $compra->detalle->first()->proveedor->empresa }}" placeholder="Nombre proveedor"
+                                                class="form-control" value="{{ $compra->proveedor->empresa }}" placeholder="Nombre proveedor"
                                                 disabled>
                                            
 

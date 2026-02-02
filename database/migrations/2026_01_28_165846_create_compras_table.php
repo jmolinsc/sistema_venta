@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('comprobante')->unique();
             $table->decimal('precio_total', 10, 2);
             $table->unsignedBigInteger('empresa_id');
+             $table->unsignedBigInteger('proveedor_id');
+            $table->foreign('proveedor_id')->references('id')->on('proveedores')->onDelete('cascade');
             $table->timestamps();
         });
     }

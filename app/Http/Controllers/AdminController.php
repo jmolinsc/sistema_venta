@@ -9,6 +9,7 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Proveedor;
 use Spatie\Permission\Models\Role;
+use App\Models\Compra;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +25,8 @@ class AdminController extends Controller
         $empresa_id = Auth::check() ? Auth::user()->empresa_id : redirect()->route('login')->send();
         $empresa = Empresa::where('id', $empresa_id)->first();
         $totalproveedores = Proveedor::count();
+        $totalcompras = Compra::count();
         return view('admin.index', compact('empresa', 'totalRoles',
-         'totalusuarios', 'totalcategorias', 'totalproductos','totalproveedores'));
+         'totalusuarios', 'totalcategorias', 'totalproductos','totalproveedores', 'totalcompras'));
     }
 }

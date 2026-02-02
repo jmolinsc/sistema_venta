@@ -73,7 +73,7 @@
                                                     event.preventDefault(); // Evita que el formulario se envíe automáticamente
 
                                                     Swal.fire({
-                                                        title: "¿Estás seguro de eliminar este proveedor?",
+                                                        title: "¿Estás seguro de eliminar esta compra?",
                                                         showDenyButton: false,
                                                         showCancelButton: true,
                                                         confirmButtonText: "Eliminar",

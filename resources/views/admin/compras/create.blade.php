@@ -324,7 +324,8 @@
                                             <input type="text" name="empresa_proveedor" id="empresa_proveedor"
                                                 class="form-control" value="" placeholder="Nombre proveedor"
                                                 disabled>
-                                            <input type="hidden" name="proveedor_id" id="proveedor_id" value="">
+                                            <input type="hidden" name="proveedor_id" id="proveedor_id"
+                                                value="{{ $compra->proveedor_id ?? '' }}">
 
                                             @error('empresa_proveedor')
                                                 <div class="text-danger">{{ $message }}</div>

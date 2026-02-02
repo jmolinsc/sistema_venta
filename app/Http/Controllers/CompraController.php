@@ -56,6 +56,7 @@ class CompraController extends Controller
         $compra->comprobante = $request->comprobante;
         $compra->precio_total = $request->precio_total;
         $compra->empresa_id = Auth::user()->empresa_id;
+        $compra->proveedor_id = $request->proveedor_id;
         $compra->save();
 
         $tmp_compras = TmpCompra::where('session_id', session()->getId())->get();
@@ -65,8 +66,6 @@ class CompraController extends Controller
             $detalle->compra_id = $compra->id;
             $detalle->producto_id = $tmp->producto_id;
             $detalle->cantidad = $tmp->cantidad;
-            $detalle->precio = $producto->precio_compra;
-            $detalle->proveedor_id = $request->proveedor_id;
             $detalle->save();
 
             $producto->stock += $tmp->cantidad;
@@ -105,16 +104,49 @@ class CompraController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Compra $compra)
+    public function update(Request $request, $id)
     {
         //
+        //
+        $request->validate([
+            'fecha' => 'required|date',
+            'comprobante' => 'required|string|max:100',
+            'precio_total' => 'required|numeric|min:0',
+
+        ]);
+        // Lógica para almacenar la compra
+        $compra = Compra::findOrFail($id);
+        $compra->fecha = $request->fecha;
+        $compra->comprobante = $request->comprobante;
+        $compra->precio_total = $request->precio_total;
+        $compra->empresa_id = Auth::user()->empresa_id;
+        $compra->proveedor_id = $request->proveedor_id;
+        $compra->save();
+
+        return redirect()->route('admin.compras.index')
+            ->with('mensaje', 'Compra actualizada exitosamente.')
+            ->with('icono', 'success');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Compra $compra)
+    public function destroy($id)
     {
+
         //
+        $compra = Compra::findOrFail($id);
+        
+        foreach ($compra->detalle as $detalle) {
+            $producto = Producto::where('id', $detalle->producto_id)->first();
+            $producto->stock -= $detalle->cantidad;
+            $producto->save();
+        }
+
+        $compra->destroy($id);
+
+        return redirect()->route('admin.compras.index')
+            ->with('mensaje', 'Compra eliminada exitosamente.')
+            ->with('icono', 'success');
     }
 }

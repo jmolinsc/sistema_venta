@@ -22,10 +22,10 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ url('admin/compras/' . $compra->id) }}" method="POST">
+                    <form action="{{ url('admin/compras/' . $compra->id) }}" id="formCompra" method="POST">
                         @csrf
                         @method('PUT')
-
+                        <input type="hidden" id="compra_id" name="compra_id" value="{{ $compra->id }}">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="row">
@@ -185,8 +185,8 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
-                                                @foreach ($compra->detalle as $detalle)
+                                                @if ($compra->detalle->count() > 0)
+                                                       @foreach ($compra->detalle as $detalle)
                                                     @php
                                                         $total_cantidad += $detalle->cantidad;
                                                         $precio_total +=
@@ -204,7 +204,7 @@
                                                         <td style="vertical-align: middle;text-align: center">
                                                             {{ $detalle->producto->nombre }}</td>
                                                         <td style="vertical-align: middle;text-align: center">
-                                                            {{ $detalle->precio }}
+                                                            {{ $detalle->producto->precio_compra }}
                                                         </td>
                                                         <td style="vertical-align: middle;text-align: center">
                                                             {{ $costo = $detalle->cantidad * $detalle->precio }}
@@ -220,6 +220,8 @@
 
                                                     </tr>
                                                 @endforeach
+                                                @endif
+                                             
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -322,9 +324,9 @@
                                         <div class="form-group">
                                             <label for="empresa_proveedor">Empresa Proveedor</label><b>*</b>
                                             <input type="text" name="empresa_proveedor" id="empresa_proveedor"
-                                                class="form-control" value="{{ $detalle->proveedor->empresa }}" placeholder="Nombre proveedor"
+                                                class="form-control" value="{{ $compra->proveedor->empresa }}" placeholder="Nombre proveedor"
                                                 disabled>
-                                            <input type="hidden" name="proveedor_id" id="proveedor_id" value="{{ $detalle->proveedor->id }}">
+                                            <input type="hidden" name="proveedor_id" id="proveedor_id" value="{{  $compra->proveedor_id  }}">
 
                                             @error('empresa_proveedor')
                                                 <div class="text-danger">{{ $message }}</div>
@@ -398,7 +400,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <a href="{{ url('admin/categorias') }}" class="btn btn-secondary">Cancelar</a>
+                                    <a href="{{ url('admin/compras') }}" class="btn btn-secondary">Cancelar</a>
                                     <button type="submit" class="btn btn-primary col-md-2 zoomP"><i
                                             class="fas fa-save"></i>
                                         Modificar Compra</button>
@@ -450,7 +452,7 @@
             var id = $(this).data('id');
             if (id) {
                 $.ajax({
-                    url: '{{ url('/admin/compras/create/tmp') }}/' + id,
+                    url: '{{ url('/admin/compras/detalle') }}/' + id,
                     type: 'POST',
                     data: {
 
@@ -504,14 +506,19 @@
 
                 var codigo = $(this).val();
                 var cantidad = $('#cantidad').val();
+                var compra_id = $('#compra_id').val();
+                var proveedor_id = $('#proveedor_id').val();
                 if (codigo.length > 0) {
                     $.ajax({
-                        url: '{{ route('admin.compras.tmp_compras') }}',
+                        url: '{{ route('admin.detalle.compras.store') }}',
                         method: 'POST',
                         data: {
                             codigo: codigo,
                             _token: '{{ csrf_token() }}',
-                            cantidad: cantidad
+                            cantidad: cantidad,
+                            compra_id: compra_id,
+                            proveedor_id: proveedor_id
+
                         },
                         success: function(response) {
                             if (response.success) {
