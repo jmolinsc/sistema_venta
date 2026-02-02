@@ -10,6 +10,7 @@ use App\Models\Producto;
 use App\Models\Proveedor;
 use Spatie\Permission\Models\Role;
 use App\Models\Compra;
+use App\Models\Cliente;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,8 @@ class AdminController extends Controller
         $empresa = Empresa::where('id', $empresa_id)->first();
         $totalproveedores = Proveedor::count();
         $totalcompras = Compra::count();
+        $totalclientes = Cliente::count();
         return view('admin.index', compact('empresa', 'totalRoles',
-         'totalusuarios', 'totalcategorias', 'totalproductos','totalproveedores', 'totalcompras'));
+         'totalusuarios', 'totalcategorias', 'totalproductos','totalproveedores', 'totalcompras', 'totalclientes'));
     }
 }

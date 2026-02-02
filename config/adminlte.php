@@ -417,6 +417,19 @@ return [
               
             ],
         ],
+        [
+            'text' => 'Clientes',
+            'icon' => 'fa-solid fa-users',
+            'classes' => 'bg-blue text-white',
+            'submenu' => [
+                [
+                    'text' => 'Listado de clientes',
+                    'url' => 'admin/clientes',
+                    'classes' => 'bg-white text-black',
+                ],
+              
+            ],
+        ],
       /*  [
             'text' => 'multilevel',
             'icon' => 'fas fa-fw fa-share',
